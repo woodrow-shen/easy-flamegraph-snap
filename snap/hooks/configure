@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+cat $SNAP/etc/default/easy-flamegraph.conf > $SNAP_DATA/etc/default/easy-flamegraph.conf

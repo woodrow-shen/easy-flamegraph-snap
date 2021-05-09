@@ -1,0 +1,87 @@
+name: easy-flamegraph
+base: core20
+version: '0.1'
+summary: Linux Performance and Data Analysis Utilities
+description: |
+  This is a light-weight utility used for performance profiling and data analysis.
+grade: devel
+confinement: strict
+architectures:
+  - build-on: arm64
+    run-on: [arm64]
+
+layout:
+  /usr/lib/easy-flamegraph:
+    bind: $SNAP/usr/lib/easy-flamegraph
+  /etc/default/easy-flamegraph.conf:
+    bind-file: $SNAP_DATA/etc/default/easy-flamegraph.conf
+
+apps:
+  entry:
+    command: usr/lib/easy-flamegraph/entry
+    #daemon: oneshot
+    #timer: 00:00-24:00/720
+
+parts:
+  perf:
+    plugin: nil
+    source: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+    source-type: git
+    source-depth: 1
+    override-build: |
+      snapcraftctl build
+      cd ${SNAPCRAFT_PART_BUILD}/tools/perf
+      make
+      mkdir -p ${SNAPCRAFT_PART_INSTALL}/usr/bin
+      cp perf ${SNAPCRAFT_PART_INSTALL}/usr/bin
+    build-packages:
+      - build-essential
+      - flex
+      - bison
+      - systemtap-sdt-dev
+      - libelf-dev
+      - libssl-dev
+      - libslang2-dev
+      - libperl-dev
+      - python3-dev
+      - liblzma-dev
+      - libzstd-dev
+      - libcap-dev
+      - libnuma-dev
+      - libbabeltrace-dev
+      - libunwind-dev
+      - libdw-dev
+      - binutils-dev
+      - libiberty-dev
+    stage-packages:
+      - libelf1
+      - libssl1.1
+      - libslang2
+      - libperl5.30
+      - python3
+      - libpython3.8
+      - liblzma5
+      - libzstd1
+      - libcap2
+      - libnuma1
+      - libbabeltrace1
+      - libunwind8
+      - libdw1
+      - libbinutils
+  flaemgraph:
+    plugin: nil
+    source: https://github.com/woodrow-shen/easy-flamegraph.git
+    source-type: git
+    after: [perf]
+    override-build: |
+      snapcraftctl build
+      make install DESTDIR=${SNAPCRAFT_PART_INSTALL}
+    build-packages:
+      - binutils
+      - make
+      - zip
+    stage-packages:
+      - binutils
+      - sysstat
+      - zip
+      - bcache-tools
