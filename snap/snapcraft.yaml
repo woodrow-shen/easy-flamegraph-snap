@@ -6,9 +6,6 @@ description: |
   This is a light-weight utility used for performance profiling and data analysis.
 grade: devel
 confinement: strict
-architectures:
-  - build-on: arm64
-    run-on: [arm64]
 
 layout:
   /usr/lib/easy-flamegraph:
