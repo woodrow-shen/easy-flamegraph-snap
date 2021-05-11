@@ -15,6 +15,9 @@ layout:
 
 apps:
   entry:
+    environment:
+      LC_ALL: "C.UTF-8"
+      PERL5LIB: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl-base/:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5/5.30/:$SNAP/usr/share/perl5/:$SNAP/usr/share/perl/5.30.0/:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.30/:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.30.0/"
     command: usr/lib/easy-flamegraph/entry
     #daemon: oneshot
     #timer: 00:00-24:00/720
@@ -51,6 +54,8 @@ parts:
       - binutils-dev
       - libiberty-dev
     stage-packages:
+      - perl-base
+      - perl-modules-5.30
       - libelf1
       - libssl1.1
       - libslang2
